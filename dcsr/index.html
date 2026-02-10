@@ -426,7 +426,7 @@ select{cursor:pointer;appearance:none;
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
       Submit Request
     </button>
-    <p class="submit-note">You'll be taken to Podio to confirm &amp; finalize. Please enter your phone &amp; email on the next page.</p>
+    <p class="submit-note">Your request will be submitted automatically.</p>
   </div>
 
 </form>
@@ -437,10 +437,7 @@ select{cursor:pointer;appearance:none;
 
 <script>
 (function(){
-  const PODIO_BASE = 'https://podio.com/webforms/30463313/2570972';
-  // Ryan Turner = option 4 on this form
-  const REFERR48_PARAM = 'fields[how-did-you-hear-about-us]=4';
-
+  const PODIO_URL = 'https://podio.com/webforms/30463313/2570972';
   const form = document.getElementById('loanForm');
   const toast = document.getElementById('toast');
 
@@ -454,94 +451,95 @@ select{cursor:pointer;appearance:none;
     const el = form.querySelector(`input[name="${name}"]:checked`);
     return el ? el.value : '';
   }
-  function enc(v){ return encodeURIComponent(v) }
+  function addField(f, name, val){ if(!val) return; var i=document.createElement('input'); i.type='hidden'; i.name=name; i.value=val; f.appendChild(i); }
 
   form.addEventListener('submit', function(e){
     e.preventDefault();
-
     form.querySelectorAll('.field.invalid').forEach(f => f.classList.remove('invalid'));
 
     const market = document.getElementById('market');
     const phone  = document.getElementById('phone');
     let valid = true;
-
     if(!market.value){ market.closest('.field').classList.add('invalid'); valid = false; }
     if(!phone.value.trim()){ phone.closest('.field').classList.add('invalid'); valid = false; }
-
     if(!valid){
       showToast('Please fill in the required fields.', true);
       document.querySelector('.field.invalid').scrollIntoView({behavior:'smooth', block:'center'});
       return;
     }
 
-    const params = [REFERR48_PARAM];
+    // Create hidden form that POSTs directly to Podio
+    var pf = document.createElement('form');
+    pf.method = 'post';
+    pf.action = PODIO_URL;
+    pf.style.display = 'none';
+
+    addField(pf, 'utf8', '\u2713');
+    addField(pf, 'authenticity_token', 'x');
+
+    // Ryan Turner always selected (option 4)
+    addField(pf, 'fields[how-did-you-hear-about-us]', '4');
 
     // Property
-    const address = document.getElementById('address').value.trim();
-    if(address) params.push('fields[property-address-map]=' + enc(address));
-    if(market.value) params.push('fields[market-2]=' + enc(market.value));
-    const propType = getRadio('propertyType');
-    if(propType) params.push('fields[property-type]=' + enc(propType));
-
-    const bedrooms = document.getElementById('bedrooms').value;
-    if(bedrooms) params.push('fields[bedrooms]=' + enc(bedrooms));
-    const bathrooms = document.getElementById('bathrooms').value;
-    if(bathrooms) params.push('fields[bathrooms]=' + enc(bathrooms));
-    const sqft = document.getElementById('sqft').value;
-    if(sqft) params.push('fields[size-of-house-sf]=' + enc(sqft));
-    const yearBuilt = document.getElementById('yearBuilt').value;
-    if(yearBuilt) params.push('fields[year-built-3]=' + enc(yearBuilt));
-
-    const condition = document.getElementById('condition').value.trim();
-    if(condition) params.push('fields[renovations-made]=' + enc(condition));
-    const photos = document.getElementById('photos').value.trim();
-    if(photos) params.push('fields[photos]=' + enc(photos));
+    addField(pf, 'fields[property-address-map]', document.getElementById('address').value.trim());
+    addField(pf, 'fields[market-2]', market.value);
+    addField(pf, 'fields[property-type]', getRadio('propertyType'));
+    addField(pf, 'fields[bedrooms]', document.getElementById('bedrooms').value);
+    addField(pf, 'fields[bathrooms]', document.getElementById('bathrooms').value);
+    addField(pf, 'fields[size-of-house-sf]', document.getElementById('sqft').value);
+    addField(pf, 'fields[year-built-3]', document.getElementById('yearBuilt').value);
+    addField(pf, 'fields[renovations-made]', document.getElementById('condition').value.trim());
+    addField(pf, 'fields[photos]', document.getElementById('photos').value.trim());
 
     // Borrower
-    const entity = document.getElementById('entity').value.trim();
-    if(entity) params.push('fields[borrowers-entity]=' + enc(entity));
-    const borrowerName = document.getElementById('borrowerName').value.trim();
-    if(borrowerName) params.push('fields[borrower-name]=' + enc(borrowerName));
-    // Phone & email cannot be prefilled via Podio URL — user enters on Podio confirmation page
-    const creditScore = document.getElementById('creditScore').value.trim();
-    if(creditScore) params.push('fields[est-credit-score-2]=' + enc(creditScore));
+    addField(pf, 'fields[borrowers-entity]', document.getElementById('entity').value.trim());
+    addField(pf, 'fields[borrower-name]', document.getElementById('borrowerName').value.trim());
 
-    // Loan & Financial
-    const loanType = getRadio('loanType');
-    if(loanType) params.push('fields[loan-type]=' + enc(loanType));
-    const loanTerm = document.getElementById('loanTerm').value;
-    if(loanTerm) params.push('fields[requested-loan-term]=' + enc(loanTerm));
-    const occupancy = getRadio('occupancy');
-    if(occupancy) params.push('fields[occupancy-status]=' + enc(occupancy));
+    // Phone (array format)
+    if(phone.value.trim()){
+      addField(pf, 'fields[seller-phone][][type]', document.getElementById('phoneType').value);
+      addField(pf, 'fields[seller-phone][][value]', phone.value.trim());
+    }
 
-    // Money fields need [value] + [currency] sub-params
-    const loanAmount = document.getElementById('loanAmount').value;
-    if(loanAmount){ params.push('fields[requested-loan-amount][value]=' + enc(loanAmount)); params.push('fields[requested-loan-amount][currency]=USD'); }
-    const arv = document.getElementById('arv').value;
-    if(arv){ params.push('fields[arv-2][value]=' + enc(arv)); params.push('fields[arv-2][currency]=USD'); }
-    const monthlyRent = document.getElementById('monthlyRent').value;
-    if(monthlyRent){ params.push('fields[rehab-budget][value]=' + enc(monthlyRent)); params.push('fields[rehab-budget][currency]=USD'); }
-    const existingMortgage = document.getElementById('existingMortgage').value;
-    if(existingMortgage){ params.push('fields[total-amount-owed][value]=' + enc(existingMortgage)); params.push('fields[total-amount-owed][currency]=USD'); }
-    const hazardInsurance = document.getElementById('hazardInsurance').value;
-    if(hazardInsurance){ params.push('fields[annual-hazzard-insurance-include-flood][value]=' + enc(hazardInsurance)); params.push('fields[annual-hazzard-insurance-include-flood][currency]=USD'); }
-    const annualTax = document.getElementById('annualTax').value;
-    if(annualTax){ params.push('fields[annual-taxes][value]=' + enc(annualTax)); params.push('fields[annual-taxes][currency]=USD'); }
+    // Email (array format)
+    var email = document.getElementById('email').value.trim();
+    if(email){
+      addField(pf, 'fields[sellers-email][][type]', document.getElementById('emailType').value);
+      addField(pf, 'fields[sellers-email][][value]', email);
+    }
 
-    const closingDate = document.getElementById('closingDate').value;
-    if(closingDate) params.push('fields[estimated-closing-date]=' + enc(closingDate));
+    addField(pf, 'fields[est-credit-score-2]', document.getElementById('creditScore').value.trim());
+
+    // Loan categories
+    addField(pf, 'fields[loan-type]', getRadio('loanType'));
+    addField(pf, 'fields[requested-loan-term]', document.getElementById('loanTerm').value);
+    addField(pf, 'fields[occupancy-status]', getRadio('occupancy'));
+
+    // Money fields (need [value] + [currency])
+    var la = document.getElementById('loanAmount').value;
+    if(la){ addField(pf, 'fields[requested-loan-amount][value]', la); addField(pf, 'fields[requested-loan-amount][currency]', 'USD'); }
+    var arv = document.getElementById('arv').value;
+    if(arv){ addField(pf, 'fields[arv-2][value]', arv); addField(pf, 'fields[arv-2][currency]', 'USD'); }
+    var mr = document.getElementById('monthlyRent').value;
+    if(mr){ addField(pf, 'fields[rehab-budget][value]', mr); addField(pf, 'fields[rehab-budget][currency]', 'USD'); }
+    var em = document.getElementById('existingMortgage').value;
+    if(em){ addField(pf, 'fields[total-amount-owed][value]', em); addField(pf, 'fields[total-amount-owed][currency]', 'USD'); }
+    var hi = document.getElementById('hazardInsurance').value;
+    if(hi){ addField(pf, 'fields[annual-hazzard-insurance-include-flood][value]', hi); addField(pf, 'fields[annual-hazzard-insurance-include-flood][currency]', 'USD'); }
+    var at = document.getElementById('annualTax').value;
+    if(at){ addField(pf, 'fields[annual-taxes][value]', at); addField(pf, 'fields[annual-taxes][currency]', 'USD'); }
+
+    // Date
+    addField(pf, 'fields[estimated-closing-date]', document.getElementById('closingDate').value);
 
     // Utilities
-    const water = getRadio('water');
-    if(water) params.push('fields[water-service]=' + enc(water));
-    const sewer = getRadio('sewer');
-    if(sewer) params.push('fields[sewer-service]=' + enc(sewer));
-    const flood = getRadio('flood');
-    if(flood) params.push('fields[flood-zone]=' + enc(flood));
+    addField(pf, 'fields[water-service]', getRadio('water'));
+    addField(pf, 'fields[sewer-service]', getRadio('sewer'));
+    addField(pf, 'fields[flood-zone]', getRadio('flood'));
 
-    const url = PODIO_BASE + '?' + params.join('&');
-    showToast('Redirecting to Podio to finalize...');
-    setTimeout(function(){ window.location.href = url; }, 600);
+    document.body.appendChild(pf);
+    showToast('Submitting your request...');
+    setTimeout(function(){ pf.submit(); }, 400);
   });
 })();
 </script>

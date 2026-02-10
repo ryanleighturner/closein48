@@ -29,9 +29,14 @@ h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;font-weight:600;line-height:1
   box-shadow:0 2px 8px rgba(0,0,0,.15);
 }
 .logo{
-  display:flex;align-items:center;text-decoration:none;
+  display:flex;align-items:center;gap:.6rem;
+  color:#fff;font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:600;
+  letter-spacing:.02em;text-decoration:none;
 }
-.logo img{height:36px;width:auto}
+.logo-mark{
+  width:28px;height:28px;border:2px solid var(--accent);border-radius:4px;
+  display:grid;place-items:center;color:var(--accent);font-size:.75rem;font-weight:700;
+}
 .header-badge{
   font-size:.7rem;color:rgba(255,255,255,.6);letter-spacing:.08em;
   text-transform:uppercase;font-family:'Work Sans',sans-serif;font-weight:500;
@@ -170,7 +175,8 @@ select{cursor:pointer;appearance:none;
 
 <header class="site-header">
   <a href="/" class="logo">
-    <img src="logo.png" alt="Close In 48 - Hard Money Lending">
+    <div class="logo-mark">48</div>
+    Close In 48
   </a>
   <nav style="display:flex;align-items:center;gap:1.25rem">
     <span style="font-size:.65rem;color:var(--accent);letter-spacing:.06em;text-transform:uppercase;border:1px solid rgba(193,138,94,.4);padding:.2rem .5rem;border-radius:3px">Fix &amp; Flip</span>

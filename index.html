@@ -53,12 +53,20 @@ body::after{
 .site-header{
   position:fixed;top:0;left:0;right:0;z-index:100;
   display:flex;align-items:center;justify-content:space-between;
-  padding:0 clamp(1.5rem,4vw,3rem);height:140px;
+  padding:0 clamp(1.5rem,4vw,3rem);height:64px;
   background:rgba(8,9,10,.8);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
   border-bottom:1px solid var(--border);
 }
-.logo{display:flex;align-items:center;gap:.5rem;text-decoration:none}
-.logo img{height:120px;width:auto}
+.logo{display:flex;align-items:center;gap:.65rem;text-decoration:none}
+.logo-num{
+  font-family:'Bebas Neue',sans-serif;font-size:1.5rem;
+  color:var(--accent);line-height:1;letter-spacing:.02em;
+}
+.logo-text{
+  font-size:.7rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);line-height:1.2;
+}
+.logo-text strong{color:var(--white);display:block;letter-spacing:.14em}
 .header-nav{display:flex;align-items:center;gap:.25rem}
 .header-nav a{
   font-size:.72rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;
@@ -323,8 +331,10 @@ body::after{
   border-top:1px solid var(--border);
   padding:3rem 2rem;text-align:center;background:var(--bg);
 }
-.footer-brand{margin-bottom:.5rem}
-.footer-brand img{height:48px;width:auto}
+.footer-brand{
+  font-family:'Bebas Neue',sans-serif;font-size:1.4rem;
+  letter-spacing:.08em;color:var(--white);margin-bottom:.25rem;
+}
 .footer-sub{font-size:.75rem;color:var(--muted);margin-bottom:1rem}
 .footer-links{display:flex;justify-content:center;gap:1.5rem}
 .footer-links a{
@@ -340,7 +350,8 @@ body::after{
 <!-- ── Header ── -->
 <header class="site-header">
   <a href="/" class="logo">
-    <img src="logo.png" alt="Close In 48 - Hard Money Lending">
+    <span class="logo-num">48</span>
+    <span class="logo-text"><strong>Close In 48</strong>Hard Money Lending</span>
   </a>
   <nav class="header-nav">
     <a href="/fixflip">Fix &amp; Flip</a>
@@ -546,7 +557,7 @@ body::after{
 
 <!-- ── Footer ── -->
 <footer class="site-footer">
-  <div class="footer-brand"><img src="logo.png" alt="Close In 48"></div>
+  <div class="footer-brand">Close In 48</div>
   <div class="footer-sub">closein48.com &mdash; Investment property financing for real estate investors.</div>
   <div class="footer-links">
     <a href="/fixflip">Fix &amp; Flip Application</a>

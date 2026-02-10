@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fix &amp; Flip Loan Request</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f5f1ec;--card:#ffffff;--primary:#1b3a5c;--accent:#c18a5e;
+  --text:#1a2332;--muted:#7a8290;--border:#e2ddd6;--input-bg:#fafaf8;
+  --input-border:#d8d3cb;--success:#0f7b5f;--error:#c0392b;
+  --radius:6px;--shadow:0 1px 3px rgba(0,0,0,.06),0 4px 12px rgba(0,0,0,.04);
+}
+html{font-size:16px;scroll-behavior:smooth}
+body{
+  font-family:'Work Sans',sans-serif;color:var(--text);background:var(--bg);
+  line-height:1.6;-webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;font-weight:600;line-height:1.2}
+
+/* ── Header ── */
+.site-header{
+  background:var(--primary);padding:0 2rem;height:56px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:100;
+  box-shadow:0 2px 8px rgba(0,0,0,.15);
+}
+.logo{
+  display:flex;align-items:center;text-decoration:none;
+}
+.logo img{height:36px;width:auto}
+.header-badge{
+  font-size:.7rem;color:rgba(255,255,255,.6);letter-spacing:.08em;
+  text-transform:uppercase;font-family:'Work Sans',sans-serif;font-weight:500;
+}
+
+/* ── Hero ── */
+.hero{
+  background:linear-gradient(170deg,var(--primary) 0%,#24506e 100%);
+  padding:3.5rem 2rem 3rem;text-align:center;color:#fff;
+  position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
+}
+.hero-content{position:relative;max-width:640px;margin:0 auto}
+.hero h1{font-size:2.4rem;margin-bottom:.5rem;font-weight:700}
+.hero p{font-size:1rem;opacity:.75;font-weight:300;max-width:480px;margin:0 auto}
+.accent-line{
+  width:48px;height:3px;background:var(--accent);margin:1rem auto 0;border-radius:2px;
+}
+
+/* ── Form Layout ── */
+.form-wrap{max-width:720px;margin:0 auto;padding:2rem 1.25rem 4rem}
+.section{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:1.75rem 1.5rem;margin-bottom:1.25rem;box-shadow:var(--shadow);
+}
+.section-title{
+  font-size:1.15rem;color:var(--primary);margin-bottom:1.25rem;
+  padding-bottom:.6rem;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:.5rem;
+}
+.section-title .icon{
+  width:20px;height:20px;border-radius:4px;background:var(--primary);
+  color:#fff;display:grid;place-items:center;font-size:.6rem;flex-shrink:0;
+}
+
+/* ── Fields ── */
+.field{margin-bottom:1.1rem}
+.field:last-child{margin-bottom:0}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem}
+@media(max-width:560px){.row,.row-3{grid-template-columns:1fr}}
+
+label{
+  display:block;font-size:.78rem;font-weight:500;color:var(--muted);
+  margin-bottom:.3rem;letter-spacing:.03em;text-transform:uppercase;
+}
+label .req{color:var(--accent);margin-left:2px}
+
+input[type="text"],input[type="email"],input[type="tel"],input[type="url"],
+input[type="number"],input[type="date"],select,textarea{
+  width:100%;padding:.6rem .75rem;font-size:.9rem;font-family:inherit;
+  border:1px solid var(--input-border);border-radius:var(--radius);
+  background:var(--input-bg);color:var(--text);transition:border .2s,box-shadow .2s;
+  outline:none;
+}
+input:focus,select:focus,textarea:focus{
+  border-color:var(--accent);box-shadow:0 0 0 3px rgba(193,138,94,.12);
+}
+textarea{resize:vertical;min-height:80px}
+select{cursor:pointer;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M6 8L1 3h10z' fill='%237a8290'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right .75rem center;
+  padding-right:2rem;
+}
+
+/* Money field */
+.money-field{position:relative}
+.money-field::before{
+  content:'$';position:absolute;left:.75rem;top:50%;transform:translateY(-50%);
+  color:var(--muted);font-size:.9rem;pointer-events:none;
+}
+.money-field input{padding-left:1.5rem}
+
+/* Compound field (phone/email with type) */
+.compound{display:grid;grid-template-columns:1fr 120px;gap:.5rem}
+@media(max-width:560px){.compound{grid-template-columns:1fr}}
+
+/* Radio group */
+.radio-group{display:flex;flex-wrap:wrap;gap:.5rem}
+.radio-group label{
+  text-transform:none;font-size:.85rem;color:var(--text);font-weight:400;
+  display:flex;align-items:center;gap:.4rem;cursor:pointer;
+  padding:.45rem .75rem;border:1px solid var(--input-border);border-radius:var(--radius);
+  background:var(--input-bg);transition:all .2s;margin-bottom:0;letter-spacing:0;
+}
+.radio-group label:hover{border-color:var(--accent)}
+.radio-group input:checked+span{color:var(--primary);font-weight:500}
+.radio-group label:has(input:checked){
+  border-color:var(--accent);background:rgba(193,138,94,.06);
+}
+.radio-group input[type="radio"]{
+  width:14px;height:14px;accent-color:var(--accent);margin:0;flex-shrink:0;
+}
+
+/* ── Submit ── */
+.submit-section{text-align:center;padding:1.5rem 0}
+.submit-btn{
+  display:inline-flex;align-items:center;gap:.5rem;
+  padding:.85rem 2.5rem;font-size:1rem;font-weight:600;font-family:inherit;
+  color:#fff;background:var(--accent);border:none;border-radius:var(--radius);
+  cursor:pointer;transition:all .25s;letter-spacing:.02em;
+  box-shadow:0 2px 8px rgba(193,138,94,.3);
+}
+.submit-btn:hover{background:#b07a4e;transform:translateY(-1px);box-shadow:0 4px 14px rgba(193,138,94,.35)}
+.submit-btn:active{transform:translateY(0)}
+.submit-btn svg{width:16px;height:16px}
+.submit-note{font-size:.75rem;color:var(--muted);margin-top:.75rem}
+
+/* ── Footer ── */
+.site-footer{
+  text-align:center;padding:2rem 1rem;font-size:.75rem;color:var(--muted);
+  border-top:1px solid var(--border);
+}
+
+/* ── Toast ── */
+.toast{
+  position:fixed;top:-80px;left:50%;transform:translateX(-50%);
+  background:var(--primary);color:#fff;padding:.8rem 1.5rem;border-radius:var(--radius);
+  font-size:.85rem;box-shadow:0 4px 20px rgba(0,0,0,.2);transition:top .4s ease;z-index:200;
+  white-space:nowrap;
+}
+.toast.show{top:72px}
+.toast.error{background:var(--error)}
+
+/* ── Validation ── */
+.field.invalid input,.field.invalid select,.field.invalid textarea{
+  border-color:var(--error);
+}
+.field.invalid label{color:var(--error)}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <a href="index.html" class="logo">
+    <img src="logo.png" alt="Close In 48 - Hard Money Lending">
+  </a>
+  <nav style="display:flex;align-items:center;gap:1.25rem">
+    <span style="font-size:.65rem;color:var(--accent);letter-spacing:.06em;text-transform:uppercase;border:1px solid rgba(193,138,94,.4);padding:.2rem .5rem;border-radius:3px">Fix &amp; Flip</span>
+    <a href="dscr.html" style="font-size:.78rem;color:rgba(255,255,255,.65);text-decoration:none;letter-spacing:.06em;text-transform:uppercase;font-weight:500">DSCR</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-content">
+    <h1>Fix &amp; Flip Loan Request</h1>
+    <p>Complete the application below to get started on your next investment property.</p>
+    <div class="accent-line"></div>
+  </div>
+</section>
+
+<form id="loanForm" class="form-wrap" novalidate>
+
+  <!-- ═══ Property Info ═══ -->
+  <div class="section">
+    <h2 class="section-title"><span class="icon">1</span> Property Information</h2>
+
+    <div class="field">
+      <label for="address">Property Address <span class="req">*</span></label>
+      <input type="text" id="address" placeholder="123 Main St, City, ST 12345" required>
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label for="market">Market <span class="req">*</span></label>
+        <select id="market" required>
+          <option value="">Select state...</option>
+          <option value="3">Alabama</option>
+          <option value="50">Colorado</option>
+          <option value="46">Delaware</option>
+          <option value="56">Massachusetts</option>
+          <option value="28">New Jersey</option>
+          <option value="4">North Carolina</option>
+          <option value="12">Ohio</option>
+          <option value="47">Oklahoma</option>
+          <option value="1">Pennsylvania</option>
+          <option value="11">Tennessee</option>
+          <option value="8">Texas</option>
+          <option value="57">Virginia</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="propertyType">Property Type</label>
+        <div class="radio-group">
+          <label><input type="radio" name="propertyType" value="1"><span>Single Family</span></label>
+          <label><input type="radio" name="propertyType" value="4"><span>Multi Unit</span></label>
+          <label><input type="radio" name="propertyType" value="3"><span>Land / New / Modular</span></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label for="bedrooms">Bedrooms</label>
+        <input type="number" id="bedrooms" min="0" placeholder="3">
+      </div>
+      <div class="field">
+        <label for="bathrooms">Bathrooms</label>
+        <input type="number" id="bathrooms" min="0" step="0.5" placeholder="2">
+      </div>
+    </div>
+    <div class="row">
+      <div class="field">
+        <label for="sqft">Size of House (SF)</label>
+        <input type="number" id="sqft" min="0" placeholder="1,800">
+      </div>
+      <div class="field">
+        <label for="yearBuilt">Year Built</label>
+        <input type="number" id="yearBuilt" min="1700" max="2030" placeholder="1985">
+      </div>
+    </div>
+
+    <div class="field" style="margin-top:1.1rem">
+      <label for="condition">Current Use &amp; Condition</label>
+      <textarea id="condition" placeholder="Describe the current state of the property, planned renovations, scope of work..."></textarea>
+    </div>
+
+    <div class="field">
+      <label for="photos">Photos (link)</label>
+      <input type="url" id="photos" placeholder="https://drive.google.com/...">
+    </div>
+  </div>
+
+  <!-- ═══ Borrower Info ═══ -->
+  <div class="section">
+    <h2 class="section-title"><span class="icon">2</span> Borrower Details</h2>
+
+    <div class="field">
+      <label for="entity">Borrower's Entity</label>
+      <input type="text" id="entity" placeholder="LLC or business name">
+    </div>
+    <div class="field">
+      <label for="borrowerName">Borrower Name</label>
+      <input type="text" id="borrowerName" placeholder="Full legal name">
+    </div>
+    <div class="field">
+      <label>Borrower Phone</label>
+      <div class="compound">
+        <input type="tel" id="phone" placeholder="(555) 123-4567">
+        <select id="phoneType">
+          <option value="mobile">Mobile</option>
+          <option value="work">Work</option>
+          <option value="home">Home</option>
+          <option value="main">Main</option>
+          <option value="work_fax">Work Fax</option>
+          <option value="private_fax">Private Fax</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+    </div>
+    <div class="field">
+      <label>Borrower Email</label>
+      <div class="compound">
+        <input type="email" id="email" placeholder="you@example.com">
+        <select id="emailType">
+          <option value="other">Other</option>
+          <option value="home">Home</option>
+          <option value="work">Work</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ Financial ═══ -->
+  <div class="section">
+    <h2 class="section-title"><span class="icon">3</span> Financial Details</h2>
+
+    <div class="row">
+      <div class="field">
+        <label for="purchasePrice">Est. Purchase Price</label>
+        <div class="money-field"><input type="number" id="purchasePrice" min="0" placeholder="250,000"></div>
+      </div>
+      <div class="field">
+        <label for="rehabBudget">Est. Rehab Budget</label>
+        <div class="money-field"><input type="number" id="rehabBudget" min="0" placeholder="75,000"></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="field">
+        <label for="arv">Est. ARV (After Repair Value)</label>
+        <div class="money-field"><input type="number" id="arv" min="0" placeholder="400,000"></div>
+      </div>
+      <div class="field">
+        <label for="annualTax">Annual Tax Amount</label>
+        <div class="money-field"><input type="number" id="annualTax" min="0" placeholder="3,200"></div>
+      </div>
+    </div>
+
+    <div class="row" style="margin-top:1.1rem">
+      <div class="field">
+        <label>Exit Strategy</label>
+        <div class="radio-group">
+          <label><input type="radio" name="exitStrategy" value="1"><span>Sell Retail</span></label>
+          <label><input type="radio" name="exitStrategy" value="2"><span>Hold to Rent / Refinance</span></label>
+        </div>
+      </div>
+      <div class="field">
+        <label for="loanTerm">Requested Loan Term</label>
+        <select id="loanTerm">
+          <option value="">Select...</option>
+          <option value="1">6 Months</option>
+          <option value="2">9 Months</option>
+          <option value="3">12 Months</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label for="closingDate">Estimated Closing Date</label>
+        <input type="date" id="closingDate">
+      </div>
+      <div class="field">
+        <label>Property Under Contract with EMD?</label>
+        <div class="radio-group">
+          <label><input type="radio" name="underContract" value="1"><span>Yes</span></label>
+          <label><input type="radio" name="underContract" value="3"><span>No</span></label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ Utilities ═══ -->
+  <div class="section">
+    <h2 class="section-title"><span class="icon">4</span> Utilities &amp; Environmental</h2>
+
+    <div class="row-3">
+      <div class="field">
+        <label>Water Service</label>
+        <div class="radio-group">
+          <label><input type="radio" name="water" value="1"><span>Public</span></label>
+          <label><input type="radio" name="water" value="2"><span>Well</span></label>
+          <label><input type="radio" name="water" value="3"><span>None</span></label>
+        </div>
+      </div>
+      <div class="field">
+        <label>Flood Zone</label>
+        <div class="radio-group">
+          <label><input type="radio" name="flood" value="1"><span>Yes</span></label>
+          <label><input type="radio" name="flood" value="2"><span>No</span></label>
+        </div>
+      </div>
+      <div class="field">
+        <label>Sewer Service</label>
+        <div class="radio-group">
+          <label><input type="radio" name="sewer" value="1"><span>Public</span></label>
+          <label><input type="radio" name="sewer" value="2"><span>Septic</span></label>
+          <label><input type="radio" name="sewer" value="3"><span>None w/ Permit</span></label>
+          <label><input type="radio" name="sewer" value="4"><span>None w/o Permit</span></label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ Submit ═══ -->
+  <div class="submit-section">
+    <button type="submit" class="submit-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      Submit Request
+    </button>
+    <p class="submit-note">You'll be taken to Podio to confirm &amp; finalize your submission.</p>
+  </div>
+
+</form>
+
+<footer class="site-footer">
+  Close In 48 &mdash; closein48.com
+</footer>
+
+<div id="toast" class="toast"></div>
+
+<script>
+(function(){
+  const PODIO_BASE = 'https://podio.com/webforms/30423633/2565168';
+
+  // Always lock "How did you hear about us?" to Ryan Turner (option 3)
+  const REFERR48_PARAM = 'fields[how-did-you-hear-about-us]=3';
+
+  const form = document.getElementById('loanForm');
+  const toast = document.getElementById('toast');
+
+  function showToast(msg, isError){
+    toast.textContent = msg;
+    toast.classList.toggle('error', !!isError);
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3500);
+  }
+
+  function getRadio(name){
+    const el = form.querySelector(`input[name="${name}"]:checked`);
+    return el ? el.value : '';
+  }
+
+  function enc(v){ return encodeURIComponent(v) }
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+
+    // Reset validation
+    form.querySelectorAll('.field.invalid').forEach(f => f.classList.remove('invalid'));
+
+    // Validate required fields
+    const address = document.getElementById('address');
+    const market  = document.getElementById('market');
+    let valid = true;
+
+    if(!address.value.trim()){
+      address.closest('.field').classList.add('invalid');
+      valid = false;
+    }
+    if(!market.value){
+      market.closest('.field').classList.add('invalid');
+      valid = false;
+    }
+
+    if(!valid){
+      showToast('Please fill in the required fields.', true);
+      document.querySelector('.field.invalid').scrollIntoView({behavior:'smooth', block:'center'});
+      return;
+    }
+
+    // Build Podio prefill URL
+    const params = [REFERR48_PARAM];
+
+    // Property Address (location field)
+    if(address.value.trim())
+      params.push('fields[property-address-map]=' + enc(address.value.trim()));
+
+    // Market (category)
+    if(market.value)
+      params.push('fields[market-2]=' + enc(market.value));
+
+    // Property Type (category)
+    const propType = getRadio('propertyType');
+    if(propType) params.push('fields[property-type]=' + enc(propType));
+
+    // Bedrooms, Bathrooms, SqFt, Year
+    const bedrooms = document.getElementById('bedrooms').value;
+    if(bedrooms) params.push('fields[bedrooms]=' + enc(bedrooms));
+
+    const bathrooms = document.getElementById('bathrooms').value;
+    if(bathrooms) params.push('fields[bathrooms]=' + enc(bathrooms));
+
+    const sqft = document.getElementById('sqft').value;
+    if(sqft) params.push('fields[size-of-house-sf]=' + enc(sqft));
+
+    const yearBuilt = document.getElementById('yearBuilt').value;
+    if(yearBuilt) params.push('fields[year-built-3]=' + enc(yearBuilt));
+
+    // Condition (text)
+    const condition = document.getElementById('condition').value.trim();
+    if(condition) params.push('fields[renovations-made]=' + enc(condition));
+
+    // Photos (embed)
+    const photos = document.getElementById('photos').value.trim();
+    if(photos) params.push('fields[photos]=' + enc(photos));
+
+    // Borrower fields
+    const entity = document.getElementById('entity').value.trim();
+    if(entity) params.push('fields[borrowers-entity]=' + enc(entity));
+
+    const borrowerName = document.getElementById('borrowerName').value.trim();
+    if(borrowerName) params.push('fields[borrower-name]=' + enc(borrowerName));
+
+    const phone = document.getElementById('phone').value.trim();
+    if(phone) params.push('fields[seller-phone]=' + enc(phone));
+
+    const email = document.getElementById('email').value.trim();
+    if(email) params.push('fields[sellers-email]=' + enc(email));
+
+    // Financial
+    const purchasePrice = document.getElementById('purchasePrice').value;
+    if(purchasePrice) params.push('fields[total-amount-owed]=' + enc(purchasePrice));
+
+    const rehabBudget = document.getElementById('rehabBudget').value;
+    if(rehabBudget) params.push('fields[rehab-budget]=' + enc(rehabBudget));
+
+    const arv = document.getElementById('arv').value;
+    if(arv) params.push('fields[arv-2]=' + enc(arv));
+
+    const annualTax = document.getElementById('annualTax').value;
+    if(annualTax) params.push('fields[money-2]=' + enc(annualTax));
+
+    // Exit Strategy (category)
+    const exitStrategy = getRadio('exitStrategy');
+    if(exitStrategy) params.push('fields[exit-stratey]=' + enc(exitStrategy));
+
+    // Loan Term (category)
+    const loanTerm = document.getElementById('loanTerm').value;
+    if(loanTerm) params.push('fields[requested-loan-term]=' + enc(loanTerm));
+
+    // Closing Date
+    const closingDate = document.getElementById('closingDate').value;
+    if(closingDate) params.push('fields[estimated-closing-date]=' + enc(closingDate));
+
+    // Under Contract (category)
+    const underContract = getRadio('underContract');
+    if(underContract) params.push('fields[listed]=' + enc(underContract));
+
+    // Utilities
+    const water = getRadio('water');
+    if(water) params.push('fields[water-service]=' + enc(water));
+
+    const sewer = getRadio('sewer');
+    if(sewer) params.push('fields[sewer-service]=' + enc(sewer));
+
+    const flood = getRadio('flood');
+    if(flood) params.push('fields[flood-zone]=' + enc(flood));
+
+    // Build final URL and redirect
+    const url = PODIO_BASE + '?' + params.join('&');
+
+    showToast('Redirecting to Podio to finalize...');
+
+    setTimeout(function(){
+      window.location.href = url;
+    }, 600);
+  });
+})();
+</script>
+</body>
+</html>

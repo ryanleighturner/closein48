@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Close In 48 &mdash; Investment Property Financing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#08090a;
+  --surface:#111214;
+  --surface-2:#191b1e;
+  --accent:#d4952a;
+  --accent-glow:rgba(212,149,42,.15);
+  --white:#f0ede8;
+  --muted:#6b6e73;
+  --border:#222426;
+  --radius:4px;
+}
+html{font-size:16px;scroll-behavior:smooth}
+body{
+  font-family:'Outfit',sans-serif;color:var(--white);background:var(--bg);
+  line-height:1.6;-webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+h1,h2,h3{font-family:'Bebas Neue',sans-serif;font-weight:400;line-height:1;letter-spacing:.04em}
+h4{font-family:'Outfit',sans-serif;font-weight:600}
+a{color:inherit;text-decoration:none}
+
+/* ── Grain overlay ── */
+body::after{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
+  background:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");
+  background-size:200px;
+  opacity:.5;
+}
+
+/* ── Animations ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes countPulse{
+  0%,100%{opacity:.06}
+  50%{opacity:.1}
+}
+@keyframes slideRight{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* ── Header ── */
+.site-header{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 clamp(1.5rem,4vw,3rem);height:64px;
+  background:rgba(8,9,10,.8);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+}
+.logo{display:flex;align-items:center;gap:.5rem;text-decoration:none}
+.logo img{height:40px;width:auto}
+.header-nav{display:flex;align-items:center;gap:.25rem}
+.header-nav a{
+  font-size:.72rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);padding:.5rem .9rem;border-radius:var(--radius);transition:all .25s;
+}
+.header-nav a:hover{color:var(--white);background:var(--surface-2)}
+
+/* ── Hero ── */
+.hero{
+  position:relative;min-height:100vh;
+  display:flex;align-items:center;justify-content:center;
+  padding:8rem 2rem 6rem;text-align:center;overflow:hidden;
+}
+.hero-bg-number{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  font-family:'Bebas Neue',sans-serif;font-size:clamp(18rem,45vw,40rem);
+  color:var(--white);opacity:.06;line-height:.8;pointer-events:none;
+  animation:countPulse 4s ease-in-out infinite;
+  user-select:none;
+}
+.hero-grid{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size:80px 80px;
+  opacity:.3;
+  mask-image:radial-gradient(ellipse 70% 60% at 50% 50%, black 20%, transparent 70%);
+  -webkit-mask-image:radial-gradient(ellipse 70% 60% at 50% 50%, black 20%, transparent 70%);
+}
+.hero-glow{
+  position:absolute;top:30%;left:50%;transform:translateX(-50%);
+  width:600px;height:400px;border-radius:50%;
+  background:radial-gradient(circle,rgba(212,149,42,.1) 0%,transparent 70%);
+  pointer-events:none;
+}
+.hero-content{position:relative;max-width:700px;z-index:1}
+.hero-eyebrow{
+  display:inline-block;
+  font-size:.68rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--accent);
+  padding:.45rem 1rem;
+  border:1px solid rgba(212,149,42,.25);border-radius:20px;
+  margin-bottom:2rem;
+  animation:fadeIn .8s .2s both;
+}
+.hero h1{
+  font-size:clamp(3.5rem,8vw,6rem);
+  margin-bottom:1.5rem;
+  animation:fadeUp .8s .4s both;
+}
+.hero h1 span{color:var(--accent)}
+.hero-sub{
+  font-size:1.05rem;font-weight:300;color:var(--muted);
+  max-width:520px;margin:0 auto 2.5rem;line-height:1.7;
+  animation:fadeUp .8s .6s both;
+}
+.hero-ctas{
+  display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;
+  animation:fadeUp .8s .8s both;
+}
+
+/* ── Buttons ── */
+.btn{
+  display:inline-flex;align-items:center;gap:.5rem;
+  padding:.8rem 1.75rem;font-size:.82rem;font-weight:600;font-family:inherit;
+  letter-spacing:.06em;text-transform:uppercase;
+  border-radius:var(--radius);transition:all .3s;cursor:pointer;border:none;
+}
+.btn-primary{
+  color:var(--bg);background:var(--accent);
+  box-shadow:0 0 20px var(--accent-glow),0 2px 8px rgba(0,0,0,.3);
+}
+.btn-primary:hover{
+  background:#e0a23a;transform:translateY(-2px);
+  box-shadow:0 0 30px rgba(212,149,42,.25),0 4px 16px rgba(0,0,0,.3);
+}
+.btn-ghost{
+  color:var(--white);background:transparent;
+  border:1px solid var(--border);
+}
+.btn-ghost:hover{border-color:var(--muted);background:var(--surface)}
+
+/* ── Stats ── */
+.stats{
+  position:relative;border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  background:var(--surface);
+}
+.stats-inner{
+  max-width:900px;margin:0 auto;
+  display:grid;grid-template-columns:repeat(3,1fr);
+}
+.stat{
+  padding:2rem 1.5rem;text-align:center;
+  position:relative;
+}
+.stat:not(:last-child)::after{
+  content:'';position:absolute;right:0;top:20%;height:60%;
+  width:1px;background:var(--border);
+}
+.stat-val{
+  font-family:'Bebas Neue',sans-serif;font-size:2.5rem;
+  color:var(--accent);line-height:1;letter-spacing:.03em;
+}
+.stat-label{
+  font-size:.68rem;font-weight:500;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.1em;margin-top:.35rem;
+}
+@media(max-width:560px){
+  .stats-inner{grid-template-columns:1fr}
+  .stat:not(:last-child)::after{display:none}
+  .stat{border-bottom:1px solid var(--border)}
+  .stat:last-child{border-bottom:none}
+}
+
+/* ── Section common ── */
+.section-pad{padding:5rem clamp(1.25rem,4vw,3rem)}
+.section-header{text-align:center;margin-bottom:3rem}
+.section-header h2{font-size:clamp(2rem,4vw,2.8rem);margin-bottom:.6rem}
+.section-header p{font-size:.9rem;color:var(--muted);max-width:460px;margin:0 auto}
+.accent-bar{
+  width:32px;height:3px;background:var(--accent);margin:0 auto 1rem;
+  border-radius:2px;transform-origin:left;
+}
+
+/* ── Products ── */
+.products{background:var(--bg)}
+.product-grid{
+  max-width:900px;margin:0 auto;
+  display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;
+}
+@media(max-width:640px){.product-grid{grid-template-columns:1fr}}
+
+.product-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:2rem;position:relative;overflow:hidden;
+  transition:border-color .3s,box-shadow .3s;
+}
+.product-card:hover{
+  border-color:rgba(212,149,42,.3);
+  box-shadow:0 0 30px var(--accent-glow);
+}
+.product-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--accent),transparent);
+  opacity:0;transition:opacity .3s;
+}
+.product-card:hover::before{opacity:1}
+
+.product-tag{
+  display:inline-block;font-size:.6rem;font-weight:600;
+  letter-spacing:.12em;text-transform:uppercase;
+  color:var(--accent);
+  padding:.3rem .6rem;border:1px solid rgba(212,149,42,.2);border-radius:2px;
+  margin-bottom:1rem;
+}
+.product-card h3{font-size:1.8rem;margin-bottom:.5rem}
+.product-card .product-desc{
+  font-size:.85rem;color:var(--muted);line-height:1.65;margin-bottom:1.25rem;
+}
+.product-card ul{list-style:none;margin-bottom:1.5rem}
+.product-card ul li{
+  font-size:.8rem;color:var(--white);padding:.4rem 0;
+  display:flex;align-items:center;gap:.6rem;
+  border-bottom:1px solid rgba(255,255,255,.04);
+}
+.product-card ul li:last-child{border-bottom:none}
+.product-card ul li::before{
+  content:'';width:5px;height:5px;border-radius:1px;
+  background:var(--accent);flex-shrink:0;transform:rotate(45deg);
+}
+.product-cta{
+  display:flex;align-items:center;gap:.4rem;
+  font-size:.75rem;font-weight:600;color:var(--accent);
+  letter-spacing:.08em;text-transform:uppercase;transition:gap .3s;
+}
+.product-cta:hover{gap:.7rem}
+.product-cta svg{width:14px;height:14px}
+
+/* ── Process ── */
+.process-section{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.process-wrap{max-width:600px;margin:0 auto}
+
+.p-step{
+  display:grid;grid-template-columns:48px 1fr;gap:1.25rem;
+  padding-bottom:2rem;position:relative;
+}
+.p-step:last-child{padding-bottom:0}
+.p-step-line{
+  display:flex;flex-direction:column;align-items:center;
+}
+.p-step-num{
+  width:40px;height:40px;border-radius:50%;
+  display:grid;place-items:center;flex-shrink:0;
+  font-family:'Bebas Neue',sans-serif;font-size:1.1rem;
+  color:var(--bg);background:var(--muted);
+  border:2px solid var(--border);
+  transition:all .3s;
+}
+.p-step:first-child .p-step-num{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+.p-step:last-child .p-step-num{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+.p-step-connector{
+  flex:1;width:2px;background:var(--border);margin-top:.5rem;
+}
+.p-step:last-child .p-step-connector{display:none}
+.p-step-body{padding-top:.5rem}
+.p-step-body h4{font-size:.95rem;margin-bottom:.2rem;color:var(--white)}
+.p-step-body p{font-size:.82rem;color:var(--muted);line-height:1.55}
+.p-step-highlight{
+  display:inline-block;margin-top:.5rem;
+  font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--accent);
+  padding:.35rem .7rem;background:var(--accent-glow);border-radius:2px;
+}
+
+/* ── Value Props ── */
+.vp-section{background:var(--bg)}
+.vp-grid{
+  max-width:900px;margin:0 auto;
+  display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;
+}
+@media(max-width:560px){.vp-grid{grid-template-columns:1fr}}
+
+.vp-card{
+  padding:1.75rem;border:1px solid var(--border);border-radius:var(--radius);
+  background:var(--surface);position:relative;
+}
+.vp-card h4{font-size:.9rem;font-weight:700;margin-bottom:.5rem;color:var(--white)}
+.vp-card p{font-size:.8rem;color:var(--muted);line-height:1.6}
+.vp-card ul{list-style:none;margin-top:.6rem}
+.vp-card ul li{
+  font-size:.8rem;color:var(--white);padding:.25rem 0;
+  display:flex;align-items:baseline;gap:.5rem;
+}
+.vp-card ul li::before{
+  content:'\2014';color:var(--accent);flex-shrink:0;font-size:.7rem;
+}
+.vp-card-accent{border-color:rgba(212,149,42,.25);background:linear-gradient(135deg,var(--surface) 0%,rgba(212,149,42,.04) 100%)}
+
+/* ── Markets ── */
+.markets-section{
+  border-top:1px solid var(--border);
+  background:var(--surface);
+}
+.markets-wrap{max-width:700px;margin:0 auto;text-align:center}
+.markets-wrap h2{font-size:clamp(1.6rem,3vw,2rem);margin-bottom:1.5rem}
+.market-tags{display:flex;flex-wrap:wrap;justify-content:center;gap:.4rem;margin-bottom:1.5rem}
+.market-tag{
+  font-size:.7rem;font-weight:500;letter-spacing:.06em;
+  padding:.4rem .8rem;
+  background:var(--surface-2);border:1px solid var(--border);border-radius:2px;
+  color:var(--white);transition:border-color .2s;
+}
+.market-tag:hover{border-color:var(--accent)}
+.markets-note{
+  font-size:.82rem;color:var(--muted);
+}
+.markets-note strong{color:var(--accent)}
+
+/* ── Footer ── */
+.site-footer{
+  border-top:1px solid var(--border);
+  padding:3rem 2rem;text-align:center;background:var(--bg);
+}
+.footer-brand{margin-bottom:.5rem}
+.footer-brand img{height:48px;width:auto}
+.footer-sub{font-size:.75rem;color:var(--muted);margin-bottom:1rem}
+.footer-links{display:flex;justify-content:center;gap:1.5rem}
+.footer-links a{
+  font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--accent);transition:opacity .2s;
+}
+.footer-links a:hover{opacity:.7}
+.footer-copy{margin-top:1.5rem;font-size:.65rem;color:var(--border)}
+</style>
+</head>
+<body>
+
+<!-- ── Header ── -->
+<header class="site-header">
+  <a href="index.html" class="logo">
+    <img src="logo.png" alt="Close In 48 - Hard Money Lending">
+  </a>
+  <nav class="header-nav">
+    <a href="fix-and-flip.html">Fix &amp; Flip</a>
+    <a href="dscr.html">DSCR</a>
+  </nav>
+</header>
+
+<!-- ── Hero ── -->
+<section class="hero">
+  <div class="hero-bg-number">48</div>
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">closein48.com</div>
+    <h1>Close in <span>48 Hours</span></h1>
+    <p class="hero-sub">100% of purchase + rehab funded. Fix &amp; flip, new construction, DSCR, and transactional loans up to $10 million. Low docs. Fast closings.</p>
+    <div class="hero-ctas">
+      <a href="fix-and-flip.html" class="btn btn-primary">Apply for Fix &amp; Flip</a>
+      <a href="dscr.html" class="btn btn-ghost">Apply for DSCR Loan</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── Stats ── -->
+<div class="stats">
+  <div class="stats-inner">
+    <div class="stat reveal">
+      <div class="stat-val">100%</div>
+      <div class="stat-label">Purchase + Rehab Funded</div>
+    </div>
+    <div class="stat reveal">
+      <div class="stat-val">48 Hrs</div>
+      <div class="stat-label">Closing Possible</div>
+    </div>
+    <div class="stat reveal">
+      <div class="stat-val">$10M</div>
+      <div class="stat-label">Loan Amounts Up To</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Products ── -->
+<section class="products section-pad">
+  <div class="section-header reveal">
+    <div class="accent-bar"></div>
+    <h2>Loan Programs</h2>
+    <p>Choose the financing that fits your investment strategy.</p>
+  </div>
+  <div class="product-grid">
+    <div class="product-card reveal">
+      <div class="product-tag">Short Term</div>
+      <h3>Fix &amp; Flip</h3>
+      <p class="product-desc">Short-term financing for investors who buy, renovate, and sell properties for profit. Get the funds to purchase and rehab your next project.</p>
+      <ul>
+        <li>6, 9, or 12 month terms</li>
+        <li>Purchase + rehab financing</li>
+        <li>Based on ARV (After Repair Value)</li>
+        <li>Single family, multi-unit, new construction</li>
+        <li>Available in 12 states</li>
+      </ul>
+      <a href="fix-and-flip.html" class="product-cta">Start Application <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    </div>
+    <div class="product-card reveal">
+      <div class="product-tag">Long Term</div>
+      <h3>DSCR Loan</h3>
+      <p class="product-desc">Long-term rental financing based on property cash flow, not personal income. Ideal for buy-and-hold investors building a portfolio.</p>
+      <ul>
+        <li>30-year fixed, ARM, or interest-only</li>
+        <li>Qualify on rental income, not W-2s</li>
+        <li>Purchase, rate/term refi, or cash-out</li>
+        <li>Long-term and short-term rentals</li>
+        <li>Available nationwide</li>
+      </ul>
+      <a href="dscr.html" class="product-cta">Start Application <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    </div>
+  </div>
+</section>
+
+<!-- ── Process ── -->
+<section class="process-section section-pad">
+  <div class="section-header reveal">
+    <div class="accent-bar"></div>
+    <h2>Our Loan Process</h2>
+    <p>From application to closing &mdash; as fast as 48 hours with docs ready.</p>
+  </div>
+  <div class="process-wrap">
+    <div class="p-step reveal">
+      <div class="p-step-line">
+        <div class="p-step-num">1</div>
+        <div class="p-step-connector"></div>
+      </div>
+      <div class="p-step-body">
+        <h4>Choose Your Loan Type</h4>
+        <p>Fix &amp; Flip, New Construction, DSCR, or Transactional Loans &mdash; up to $10 million.</p>
+      </div>
+    </div>
+    <div class="p-step reveal">
+      <div class="p-step-line">
+        <div class="p-step-num">2</div>
+        <div class="p-step-connector"></div>
+      </div>
+      <div class="p-step-body">
+        <h4>Complete the Intake Form</h4>
+        <p>Fill out the loan-specific application with your property and deal details.</p>
+      </div>
+    </div>
+    <div class="p-step reveal">
+      <div class="p-step-line">
+        <div class="p-step-num">3</div>
+        <div class="p-step-connector"></div>
+      </div>
+      <div class="p-step-body">
+        <h4>Submit Your Docs</h4>
+        <p>We only need 4 items: Purchase/Assignment Agreement, Corp. Docs, State Issued ID, and Proof of Funds.</p>
+      </div>
+    </div>
+    <div class="p-step reveal">
+      <div class="p-step-line">
+        <div class="p-step-num">4</div>
+        <div class="p-step-connector"></div>
+      </div>
+      <div class="p-step-body">
+        <h4>Docs Sent to Underwriting</h4>
+        <p>Your lender packages everything and sends it to underwriting for review.</p>
+      </div>
+    </div>
+    <div class="p-step reveal">
+      <div class="p-step-line">
+        <div class="p-step-num">5</div>
+        <div class="p-step-connector"></div>
+      </div>
+      <div class="p-step-body">
+        <h4>Terms &amp; Agreements Generated</h4>
+        <p>Underwriting generates your loan terms and agreements for review and signature.</p>
+      </div>
+    </div>
+    <div class="p-step reveal">
+      <div class="p-step-line">
+        <div class="p-step-num">6</div>
+      </div>
+      <div class="p-step-body">
+        <h4>Inspection &amp; Closing</h4>
+        <p>3rd party inspection is scheduled and closing is set.</p>
+        <span class="p-step-highlight">Can close within 48 hours if docs are provided right away</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Value Props ── -->
+<section class="vp-section section-pad">
+  <div class="section-header reveal">
+    <div class="accent-bar"></div>
+    <h2>Why Close In 48?</h2>
+  </div>
+  <div class="vp-grid">
+    <div class="vp-card vp-card-accent reveal">
+      <h4>100% Purchase + Rehab</h4>
+      <p>We fund 100% of the purchase price and rehab budget as long as the total stays at or below 70% of ARV (After Repair Value).</p>
+    </div>
+    <div class="vp-card reveal">
+      <h4>Low Documentation</h4>
+      <p>Only 4 documents needed to get started:</p>
+      <ul>
+        <li>Purchase / Assignment Agreement</li>
+        <li>Corp. Docs (LLC, etc.)</li>
+        <li>State Issued ID</li>
+        <li>Proof of Funds &mdash; screenshot of checking account (20% of loan amount in the bank)</li>
+      </ul>
+    </div>
+    <div class="vp-card reveal">
+      <h4>DSCR Nationwide</h4>
+      <p>Our DSCR program is available across the entire USA. Qualify on rental income, not personal income. 30-year fixed, ARM, or interest-only options.</p>
+    </div>
+    <div class="vp-card vp-card-accent reveal">
+      <h4>Close in 48 Hours</h4>
+      <p>When your documentation is submitted right away, we can schedule inspection and close in as little as 48 hours. No waiting around.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── Markets ── -->
+<section class="markets-section section-pad">
+  <div class="markets-wrap reveal">
+    <h2>Fix &amp; Flip Markets</h2>
+    <div class="market-tags">
+      <span class="market-tag">Massachusetts</span>
+      <span class="market-tag">Ohio</span>
+      <span class="market-tag">Colorado</span>
+      <span class="market-tag">North Carolina</span>
+      <span class="market-tag">Virginia</span>
+      <span class="market-tag">Delaware</span>
+      <span class="market-tag">New Jersey</span>
+      <span class="market-tag">Pennsylvania</span>
+      <span class="market-tag">Tennessee</span>
+      <span class="market-tag">Texas</span>
+      <span class="market-tag">Oklahoma</span>
+      <span class="market-tag">Alabama</span>
+    </div>
+    <p class="markets-note">DSCR loans available <strong>across the entire USA</strong></p>
+  </div>
+</section>
+
+<!-- ── Footer ── -->
+<footer class="site-footer">
+  <div class="footer-brand"><img src="logo.png" alt="Close In 48"></div>
+  <div class="footer-sub">closein48.com &mdash; Investment property financing for real estate investors.</div>
+  <div class="footer-links">
+    <a href="fix-and-flip.html">Fix &amp; Flip Application</a>
+    <a href="dscr.html">DSCR Application</a>
+  </div>
+</footer>
+
+<script>
+// Scroll-triggered reveal
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      obs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>

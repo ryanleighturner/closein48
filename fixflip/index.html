@@ -395,7 +395,7 @@ select{cursor:pointer;appearance:none;
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
       Submit Request
     </button>
-    <p class="submit-note">You'll be taken to Podio to confirm &amp; finalize your submission.</p>
+    <p class="submit-note">You'll be taken to Podio to confirm &amp; finalize. Please enter your phone &amp; email on the next page.</p>
   </div>
 
 </form>
@@ -499,24 +499,20 @@ select{cursor:pointer;appearance:none;
     const borrowerName = document.getElementById('borrowerName').value.trim();
     if(borrowerName) params.push('fields[borrower-name]=' + enc(borrowerName));
 
-    const phone = document.getElementById('phone').value.trim();
-    if(phone) params.push('fields[seller-phone]=' + enc(phone));
+    // Phone & email cannot be prefilled via Podio URL — user enters on Podio confirmation page
 
-    const email = document.getElementById('email').value.trim();
-    if(email) params.push('fields[sellers-email]=' + enc(email));
-
-    // Financial
+    // Financial (money fields need [value] + [currency] sub-params)
     const purchasePrice = document.getElementById('purchasePrice').value;
-    if(purchasePrice) params.push('fields[total-amount-owed]=' + enc(purchasePrice));
+    if(purchasePrice){ params.push('fields[total-amount-owed][value]=' + enc(purchasePrice)); params.push('fields[total-amount-owed][currency]=USD'); }
 
     const rehabBudget = document.getElementById('rehabBudget').value;
-    if(rehabBudget) params.push('fields[rehab-budget]=' + enc(rehabBudget));
+    if(rehabBudget){ params.push('fields[rehab-budget][value]=' + enc(rehabBudget)); params.push('fields[rehab-budget][currency]=USD'); }
 
     const arv = document.getElementById('arv').value;
-    if(arv) params.push('fields[arv-2]=' + enc(arv));
+    if(arv){ params.push('fields[arv-2][value]=' + enc(arv)); params.push('fields[arv-2][currency]=USD'); }
 
     const annualTax = document.getElementById('annualTax').value;
-    if(annualTax) params.push('fields[money-2]=' + enc(annualTax));
+    if(annualTax){ params.push('fields[money-2][value]=' + enc(annualTax)); params.push('fields[money-2][currency]=USD'); }
 
     // Exit Strategy (category)
     const exitStrategy = getRadio('exitStrategy');

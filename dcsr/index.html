@@ -426,7 +426,7 @@ select{cursor:pointer;appearance:none;
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
       Submit Request
     </button>
-    <p class="submit-note">You'll be taken to Podio to confirm &amp; finalize your submission.</p>
+    <p class="submit-note">You'll be taken to Podio to confirm &amp; finalize. Please enter your phone &amp; email on the next page.</p>
   </div>
 
 </form>
@@ -502,9 +502,7 @@ select{cursor:pointer;appearance:none;
     if(entity) params.push('fields[borrowers-entity]=' + enc(entity));
     const borrowerName = document.getElementById('borrowerName').value.trim();
     if(borrowerName) params.push('fields[borrower-name]=' + enc(borrowerName));
-    if(phone.value.trim()) params.push('fields[seller-phone]=' + enc(phone.value.trim()));
-    const email = document.getElementById('email').value.trim();
-    if(email) params.push('fields[sellers-email]=' + enc(email));
+    // Phone & email cannot be prefilled via Podio URL — user enters on Podio confirmation page
     const creditScore = document.getElementById('creditScore').value.trim();
     if(creditScore) params.push('fields[est-credit-score-2]=' + enc(creditScore));
 
@@ -516,18 +514,19 @@ select{cursor:pointer;appearance:none;
     const occupancy = getRadio('occupancy');
     if(occupancy) params.push('fields[occupancy-status]=' + enc(occupancy));
 
+    // Money fields need [value] + [currency] sub-params
     const loanAmount = document.getElementById('loanAmount').value;
-    if(loanAmount) params.push('fields[requested-loan-amount]=' + enc(loanAmount));
+    if(loanAmount){ params.push('fields[requested-loan-amount][value]=' + enc(loanAmount)); params.push('fields[requested-loan-amount][currency]=USD'); }
     const arv = document.getElementById('arv').value;
-    if(arv) params.push('fields[arv-2]=' + enc(arv));
+    if(arv){ params.push('fields[arv-2][value]=' + enc(arv)); params.push('fields[arv-2][currency]=USD'); }
     const monthlyRent = document.getElementById('monthlyRent').value;
-    if(monthlyRent) params.push('fields[rehab-budget]=' + enc(monthlyRent));
+    if(monthlyRent){ params.push('fields[rehab-budget][value]=' + enc(monthlyRent)); params.push('fields[rehab-budget][currency]=USD'); }
     const existingMortgage = document.getElementById('existingMortgage').value;
-    if(existingMortgage) params.push('fields[total-amount-owed]=' + enc(existingMortgage));
+    if(existingMortgage){ params.push('fields[total-amount-owed][value]=' + enc(existingMortgage)); params.push('fields[total-amount-owed][currency]=USD'); }
     const hazardInsurance = document.getElementById('hazardInsurance').value;
-    if(hazardInsurance) params.push('fields[annual-hazzard-insurance-include-flood]=' + enc(hazardInsurance));
+    if(hazardInsurance){ params.push('fields[annual-hazzard-insurance-include-flood][value]=' + enc(hazardInsurance)); params.push('fields[annual-hazzard-insurance-include-flood][currency]=USD'); }
     const annualTax = document.getElementById('annualTax').value;
-    if(annualTax) params.push('fields[annual-taxes]=' + enc(annualTax));
+    if(annualTax){ params.push('fields[annual-taxes][value]=' + enc(annualTax)); params.push('fields[annual-taxes][currency]=USD'); }
 
     const closingDate = document.getElementById('closingDate').value;
     if(closingDate) params.push('fields[estimated-closing-date]=' + enc(closingDate));

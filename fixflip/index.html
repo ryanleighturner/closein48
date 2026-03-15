@@ -194,6 +194,19 @@ select{cursor:pointer;appearance:none;
 
 <form id="loanForm" class="form-wrap" novalidate>
 
+  <!-- ═══ Loan Officer ═══ -->
+  <div class="section">
+    <h2 class="section-title"><span class="icon">&bull;</span> Loan Officer</h2>
+    <div class="field">
+      <label for="loanOfficer">Select Loan Officer <span class="req">*</span></label>
+      <select id="loanOfficer" required>
+        <option value="">Select...</option>
+        <option value="3">Ryan Turner</option>
+        <option value="10">David Stricker</option>
+      </select>
+    </div>
+  </div>
+
   <!-- ═══ Property Info ═══ -->
   <div class="section">
     <h2 class="section-title"><span class="icon">1</span> Property Information</h2>
@@ -437,9 +450,11 @@ select{cursor:pointer;appearance:none;
     e.preventDefault();
     form.querySelectorAll('.field.invalid').forEach(f => f.classList.remove('invalid'));
 
+    const loanOfficer = document.getElementById('loanOfficer');
     const address = document.getElementById('address');
     const market  = document.getElementById('market');
     let valid = true;
+    if(!loanOfficer.value){ loanOfficer.closest('.field').classList.add('invalid'); valid = false; }
     if(!address.value.trim()){ address.closest('.field').classList.add('invalid'); valid = false; }
     if(!market.value){ market.closest('.field').classList.add('invalid'); valid = false; }
     if(!valid){
@@ -457,8 +472,8 @@ select{cursor:pointer;appearance:none;
     addField(pf, 'utf8', '\u2713');
     addField(pf, 'authenticity_token', 'x');
 
-    // Ryan Turner always selected (option 3)
-    addField(pf, 'fields[how-did-you-hear-about-us]', '3');
+    // Loan officer selection
+    addField(pf, 'fields[how-did-you-hear-about-us]', loanOfficer.value);
 
     // Property
     addField(pf, 'fields[property-address-map]', address.value.trim());

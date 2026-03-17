@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Borrower Intake &mdash; Close In 48</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f5f1ec;--card:#ffffff;--primary:#1b3a5c;--accent:#c18a5e;
+  --text:#1a2332;--muted:#7a8290;--border:#e2ddd6;--input-bg:#fafaf8;
+  --input-border:#d8d3cb;--success:#0f7b5f;--error:#c0392b;
+  --radius:6px;--shadow:0 1px 3px rgba(0,0,0,.06),0 4px 12px rgba(0,0,0,.04);
+}
+html{font-size:16px;scroll-behavior:smooth}
+body{
+  font-family:'Work Sans',sans-serif;color:var(--text);background:var(--bg);
+  line-height:1.6;-webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;font-weight:600;line-height:1.2}
+
+/* ── Header ── */
+.site-header{
+  background:var(--primary);padding:0 2rem;height:56px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:100;
+  box-shadow:0 2px 8px rgba(0,0,0,.15);
+}
+.logo{
+  display:flex;align-items:center;gap:.6rem;
+  color:#fff;font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:600;
+  letter-spacing:.02em;text-decoration:none;
+}
+.logo-mark{
+  width:28px;height:28px;border:2px solid var(--accent);border-radius:4px;
+  display:grid;place-items:center;color:var(--accent);font-size:.75rem;font-weight:700;
+}
+.header-nav{display:flex;align-items:center;gap:1.25rem}
+.header-nav a{
+  font-size:.78rem;color:rgba(255,255,255,.65);text-decoration:none;
+  letter-spacing:.06em;text-transform:uppercase;font-weight:500;transition:color .2s;
+}
+.header-nav a:hover{color:#fff}
+.header-badge{
+  font-size:.65rem;color:var(--accent);letter-spacing:.06em;text-transform:uppercase;
+  border:1px solid rgba(193,138,94,.4);padding:.2rem .5rem;border-radius:3px;
+}
+
+/* ── Hero ── */
+.hero{
+  background:linear-gradient(170deg,var(--primary) 0%,#2a4a6e 100%);
+  padding:3.5rem 2rem 3rem;text-align:center;color:#fff;
+  position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
+}
+.hero-content{position:relative;max-width:640px;margin:0 auto}
+.hero h1{font-size:2.4rem;margin-bottom:.5rem;font-weight:700}
+.hero p{font-size:1rem;opacity:.75;font-weight:300;max-width:480px;margin:0 auto}
+.accent-line{
+  width:48px;height:3px;background:var(--accent);margin:1rem auto 0;border-radius:2px;
+}
+
+/* ── Form Layout ── */
+.form-wrap{max-width:720px;margin:0 auto;padding:2rem 1.25rem 4rem}
+.section{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:1.75rem 1.5rem;margin-bottom:1.25rem;box-shadow:var(--shadow);
+}
+.section-title{
+  font-size:1.15rem;color:var(--primary);margin-bottom:1.25rem;
+  padding-bottom:.6rem;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:.5rem;
+}
+.section-title .icon{
+  width:20px;height:20px;border-radius:4px;background:var(--primary);
+  color:#fff;display:grid;place-items:center;font-size:.6rem;flex-shrink:0;
+}
+
+/* ── Fields ── */
+.field{margin-bottom:1.1rem}
+.field:last-child{margin-bottom:0}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem}
+@media(max-width:560px){.row,.row-3{grid-template-columns:1fr}}
+
+label{
+  display:block;font-size:.78rem;font-weight:500;color:var(--muted);
+  margin-bottom:.3rem;letter-spacing:.03em;text-transform:uppercase;
+}
+label .req{color:var(--accent);margin-left:2px}
+
+input[type="text"],input[type="email"],input[type="tel"],input[type="url"],
+input[type="number"],input[type="date"],select,textarea{
+  width:100%;padding:.6rem .75rem;font-size:.9rem;font-family:inherit;
+  border:1px solid var(--input-border);border-radius:var(--radius);
+  background:var(--input-bg);color:var(--text);transition:border .2s,box-shadow .2s;
+  outline:none;
+}
+input:focus,select:focus,textarea:focus{
+  border-color:var(--accent);box-shadow:0 0 0 3px rgba(193,138,94,.12);
+}
+textarea{resize:vertical;min-height:80px}
+select{cursor:pointer;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M6 8L1 3h10z' fill='%237a8290'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right .75rem center;
+  padding-right:2rem;
+}
+
+/* Money field */
+.money-field{position:relative}
+.money-field::before{
+  content:'$';position:absolute;left:.75rem;top:50%;transform:translateY(-50%);
+  color:var(--muted);font-size:.9rem;pointer-events:none;
+}
+.money-field input{padding-left:1.5rem}
+
+/* Compound field (phone with type) */
+.compound{display:grid;grid-template-columns:1fr 120px;gap:.5rem}
+@media(max-width:560px){.compound{grid-template-columns:1fr}}
+
+/* Radio group */
+.radio-group{display:flex;flex-wrap:wrap;gap:.5rem}
+.radio-group label{
+  text-transform:none;font-size:.85rem;color:var(--text);font-weight:400;
+  display:flex;align-items:center;gap:.4rem;cursor:pointer;
+  padding:.45rem .75rem;border:1px solid var(--input-border);border-radius:var(--radius);
+  background:var(--input-bg);transition:all .2s;margin-bottom:0;letter-spacing:0;
+}
+.radio-group label:hover{border-color:var(--accent)}
+.radio-group input:checked+span{color:var(--primary);font-weight:500}
+.radio-group label:has(input:checked){
+  border-color:var(--accent);background:rgba(193,138,94,.06);
+}
+.radio-group input[type="radio"],
+.radio-group input[type="checkbox"]{
+  width:14px;height:14px;accent-color:var(--accent);margin:0;flex-shrink:0;
+}
+
+/* Checkbox group */
+.check-group{display:flex;flex-wrap:wrap;gap:.5rem}
+.check-group label{
+  text-transform:none;font-size:.85rem;color:var(--text);font-weight:400;
+  display:flex;align-items:center;gap:.4rem;cursor:pointer;
+  padding:.45rem .75rem;border:1px solid var(--input-border);border-radius:var(--radius);
+  background:var(--input-bg);transition:all .2s;margin-bottom:0;letter-spacing:0;
+}
+.check-group label:hover{border-color:var(--accent)}
+.check-group input:checked+span{color:var(--primary);font-weight:500}
+.check-group label:has(input:checked){
+  border-color:var(--accent);background:rgba(193,138,94,.06);
+}
+.check-group input[type="checkbox"]{
+  width:14px;height:14px;accent-color:var(--accent);margin:0;flex-shrink:0;
+}
+
+/* ── Submit ── */
+.submit-section{text-align:center;padding:1.5rem 0}
+.submit-btn{
+  display:inline-flex;align-items:center;gap:.5rem;
+  padding:.85rem 2.5rem;font-size:1rem;font-weight:600;font-family:inherit;
+  color:#fff;background:var(--accent);border:none;border-radius:var(--radius);
+  cursor:pointer;transition:all .25s;letter-spacing:.02em;
+  box-shadow:0 2px 8px rgba(193,138,94,.3);
+}
+.submit-btn:hover{background:#b07a4e;transform:translateY(-1px);box-shadow:0 4px 14px rgba(193,138,94,.35)}
+.submit-btn:active{transform:translateY(0)}
+.submit-btn svg{width:16px;height:16px}
+.submit-note{font-size:.75rem;color:var(--muted);margin-top:.75rem}
+
+/* ── Footer ── */
+.site-footer{
+  text-align:center;padding:2rem 1rem;font-size:.75rem;color:var(--muted);
+  border-top:1px solid var(--border);
+}
+
+/* ── Toast ── */
+.toast{
+  position:fixed;top:-80px;left:50%;transform:translateX(-50%);
+  background:var(--primary);color:#fff;padding:.8rem 1.5rem;border-radius:var(--radius);
+  font-size:.85rem;box-shadow:0 4px 20px rgba(0,0,0,.2);transition:top .4s ease;z-index:200;
+  white-space:nowrap;
+}
+.toast.show{top:72px}
+.toast.error{background:var(--error)}
+
+/* ── Validation ── */
+.field.invalid input,.field.invalid select,.field.invalid textarea{
+  border-color:var(--error);
+}
+.field.invalid label{color:var(--error)}
+.field.invalid .check-group label,.field.invalid .radio-group label{
+  border-color:var(--error);
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <a href="/" class="logo">
+    <div class="logo-mark">48</div>
+    Close In 48
+  </a>
+  <nav class="header-nav">
+    <span class="header-badge">Borrower Intake</span>
+    <a href="/fixflip">Fix &amp; Flip</a>
+    <a href="/dcsr">DSCR</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-content">
+    <h1>Borrower Qualification</h1>
+    <p>Don't have a property yet? Get pre-qualified so you're ready when the right deal comes along.</p>
+    <div class="accent-line"></div>
+  </div>
+</section>
+
+<form id="intakeForm" class="form-wrap" novalidate>
+
+  <!-- ═══ Contact Info ═══ -->
+  <div class="section">
+    <h2 class="section-title"><span class="icon">1</span> Contact Information</h2>
+
+    <div class="row">
+      <div class="field">
+        <label for="firstName">First Name</label>
+        <input type="text" id="firstName" placeholder="John">
+      </div>
+      <div class="field">
+        <label for="lastName">Last Name</label>
+        <input type="text" id="lastName" placeholder="Smith">
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Phone</label>
+      <div class="compound">
+        <input type="tel" id="phone" placeholder="(555) 123-4567">
+        <select id="phoneType">
+          <option value="mobile">Mobile</option>
+          <option value="work">Work</option>
+          <option value="home">Home</option>
+          <option value="main">Main</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="email">Email</label>
+      <input type="email" id="email" placeholder="you@example.com">
+    </div>
+
+    <div class="field">
+      <label for="company">Company</label>
+      <input type="text" id="company" placeholder="LLC or business name">
+    </div>
+  </div>
+
+  <!-- ═══ Financial Profile ═══ -->
+  <div class="section">
+    <h2 class="section-title"><span class="icon">2</span> Financial Profile</h2>
+
+    <div class="row">
+      <div class="field">
+        <label for="creditScore">Estimated Credit Score</label>
+        <input type="number" id="creditScore" min="300" max="850" placeholder="720">
+      </div>
+      <div class="field">
+        <label for="liquidity">Est. Proof of Funds / Liquidity</label>
+        <select id="liquidity">
+          <option value="">Select range...</option>
+          <option value="1">&lt; $5,000</option>
+          <option value="2">&lt; $20,000</option>
+          <option value="3">&lt; $50,000</option>
+          <option value="4">&lt; $100,000</option>
+          <option value="5">&lt; $250,000</option>
+          <option value="6">&gt; $250,000</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="currentTerms">Current Loan Terms?</label>
+      <textarea id="currentTerms" placeholder="Describe any current loan terms you have..."></textarea>
+    </div>
+  </div>
+
+  <!-- ═══ Investment Details ═══ -->
+  <div class="section">
+    <h2 class="section-title"><span class="icon">3</span> Investment Details</h2>
+
+    <div class="field">
+      <label>What Type of Loan Are You Looking For?</label>
+      <div class="check-group">
+        <label><input type="checkbox" name="loanType" value="1"><span>Fix &amp; Flip (Short Term Hard Money)</span></label>
+        <label><input type="checkbox" name="loanType" value="2"><span>DSCR (Debt Service Ratio Coverage)</span></label>
+        <label><input type="checkbox" name="loanType" value="3"><span>Transactional</span></label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>How Many Loans / Properties Per Year? <span class="req">*</span></label>
+      <div class="check-group">
+        <label><input type="checkbox" name="loansPerYear" value="1"><span>1&ndash;5</span></label>
+        <label><input type="checkbox" name="loansPerYear" value="2"><span>6&ndash;10</span></label>
+        <label><input type="checkbox" name="loansPerYear" value="3"><span>11&ndash;20</span></label>
+        <label><input type="checkbox" name="loansPerYear" value="4"><span>20+</span></label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>What Is Your Investment Strategy? <span class="req">*</span></label>
+      <div class="check-group">
+        <label><input type="checkbox" name="strategy" value="1"><span>Buy / Hold &ndash; Rentals</span></label>
+        <label><input type="checkbox" name="strategy" value="2"><span>Retail Flips</span></label>
+        <label><input type="checkbox" name="strategy" value="3"><span>New Construction</span></label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Preferred Development</label>
+      <div class="check-group">
+        <label><input type="checkbox" name="development" value="1"><span>Commercial</span></label>
+        <label><input type="checkbox" name="development" value="2"><span>Multi-Family</span></label>
+        <label><input type="checkbox" name="development" value="3"><span>Lots / Dirt</span></label>
+        <label><input type="checkbox" name="development" value="4"><span>Single Family</span></label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="projectSize">Project Size (ARV)</label>
+      <div class="money-field"><input type="number" id="projectSize" min="0" placeholder="400,000"></div>
+    </div>
+  </div>
+
+  <!-- ═══ Market ═══ -->
+  <div class="section">
+    <h2 class="section-title"><span class="icon">4</span> Target Market</h2>
+
+    <div class="field">
+      <label>Market(s) of Interest</label>
+      <div class="check-group">
+        <label><input type="checkbox" name="market" value="20"><span>Alabama</span></label>
+        <label><input type="checkbox" name="market" value="15"><span>Alaska</span></label>
+        <label><input type="checkbox" name="market" value="12"><span>Arizona</span></label>
+        <label><input type="checkbox" name="market" value="17"><span>Arkansas</span></label>
+        <label><input type="checkbox" name="market" value="19"><span>Colorado</span></label>
+        <label><input type="checkbox" name="market" value="8"><span>Florida (Non-Coastal)</span></label>
+        <label><input type="checkbox" name="market" value="13"><span>Georgia</span></label>
+        <label><input type="checkbox" name="market" value="9"><span>Maryland</span></label>
+        <label><input type="checkbox" name="market" value="21"><span>Mississippi</span></label>
+        <label><input type="checkbox" name="market" value="18"><span>New Mexico</span></label>
+        <label><input type="checkbox" name="market" value="7"><span>New Jersey</span></label>
+        <label><input type="checkbox" name="market" value="16"><span>New York</span></label>
+        <label><input type="checkbox" name="market" value="3"><span>North Carolina</span></label>
+        <label><input type="checkbox" name="market" value="10"><span>Ohio</span></label>
+        <label><input type="checkbox" name="market" value="11"><span>Oklahoma</span></label>
+        <label><input type="checkbox" name="market" value="2"><span>Pennsylvania</span></label>
+        <label><input type="checkbox" name="market" value="14"><span>South Carolina</span></label>
+        <label><input type="checkbox" name="market" value="4"><span>Tennessee</span></label>
+        <label><input type="checkbox" name="market" value="5"><span>Texas</span></label>
+        <label><input type="checkbox" name="market" value="6"><span>Virginia</span></label>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ Submit ═══ -->
+  <div class="submit-section">
+    <button type="submit" class="submit-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      Submit Qualification
+    </button>
+    <p class="submit-note">Your information will be submitted for pre-qualification review.</p>
+  </div>
+
+</form>
+
+<footer class="site-footer">
+  Close In 48 &mdash; closein48.com
+</footer>
+
+<div id="toast" class="toast"></div>
+
+<script>
+(function(){
+  var PODIO_URL = 'https://podio.com/webforms/30423578/2565153';
+  var form = document.getElementById('intakeForm');
+  var toast = document.getElementById('toast');
+
+  function showToast(msg, isError){
+    toast.textContent = msg;
+    toast.classList.toggle('error', !!isError);
+    toast.classList.add('show');
+    setTimeout(function(){ toast.classList.remove('show'); }, 3500);
+  }
+
+  function addField(f, name, val){
+    if(!val) return;
+    var i = document.createElement('input');
+    i.type = 'hidden'; i.name = name; i.value = val;
+    f.appendChild(i);
+  }
+
+  function getChecked(name){
+    var els = form.querySelectorAll('input[name="' + name + '"]:checked');
+    var vals = [];
+    els.forEach(function(el){ vals.push(el.value); });
+    return vals;
+  }
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    form.querySelectorAll('.field.invalid').forEach(function(f){ f.classList.remove('invalid'); });
+
+    var loansPerYear = getChecked('loansPerYear');
+    var strategy = getChecked('strategy');
+    var valid = true;
+
+    if(loansPerYear.length === 0){
+      var lpField = form.querySelector('input[name="loansPerYear"]').closest('.field');
+      lpField.classList.add('invalid');
+      valid = false;
+    }
+    if(strategy.length === 0){
+      var sField = form.querySelector('input[name="strategy"]').closest('.field');
+      sField.classList.add('invalid');
+      valid = false;
+    }
+    if(!valid){
+      showToast('Please fill in the required fields.', true);
+      document.querySelector('.field.invalid').scrollIntoView({behavior:'smooth', block:'center'});
+      return;
+    }
+
+    // Create hidden form that POSTs to Podio
+    var pf = document.createElement('form');
+    pf.method = 'post';
+    pf.action = PODIO_URL;
+    pf.style.display = 'none';
+
+    addField(pf, 'utf8', '\u2713');
+    addField(pf, 'authenticity_token', 'x');
+
+    // Contact
+    addField(pf, 'fields[first-name]', document.getElementById('firstName').value.trim());
+    addField(pf, 'fields[last-name]', document.getElementById('lastName').value.trim());
+    addField(pf, 'fields[email]', document.getElementById('email').value.trim());
+    addField(pf, 'fields[company]', document.getElementById('company').value.trim());
+
+    // Phone (array format for Podio)
+    var phone = document.getElementById('phone').value.trim();
+    if(phone){
+      addField(pf, 'fields[main-phone][][type]', document.getElementById('phoneType').value);
+      addField(pf, 'fields[main-phone][][value]', phone);
+    }
+
+    // Financial
+    addField(pf, 'fields[estimated-credit-score]', document.getElementById('creditScore').value);
+    addField(pf, 'fields[est-pof-liquidity]', document.getElementById('liquidity').value);
+    addField(pf, 'fields[how-muuch-are-you-currentl-paing-for-loans-terms]', document.getElementById('currentTerms').value.trim());
+
+    // Investment - multi-select fields (each checked value as separate field)
+    var loanTypes = getChecked('loanType');
+    loanTypes.forEach(function(v){ addField(pf, 'fields[what-type-of-loan-are-you-looking-for][]', v); });
+
+    loansPerYear.forEach(function(v){ addField(pf, 'fields[what-is-your-time-frame-to-acquire-your-first-passive-i][]', v); });
+
+    strategy.forEach(function(v){ addField(pf, 'fields[what-strategy-are-you-planning-to-use-to-acquire-your-f][]', v); });
+
+    var development = getChecked('development');
+    development.forEach(function(v){ addField(pf, 'fields[preferred-development][]', v); });
+
+    // Project Size (currency)
+    var ps = document.getElementById('projectSize').value;
+    if(ps){ addField(pf, 'fields[project-size-arv][value]', ps); addField(pf, 'fields[project-size-arv][currency]', 'USD'); }
+
+    // Markets (multi-select)
+    var markets = getChecked('market');
+    markets.forEach(function(v){ addField(pf, 'fields[market][]', v); });
+
+    document.body.appendChild(pf);
+    showToast('Submitting your qualification...');
+    setTimeout(function(){ pf.submit(); }, 400);
+  });
+})();
+</script>
+</body>
+</html>

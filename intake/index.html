@@ -222,6 +222,19 @@ select{cursor:pointer;appearance:none;
 
 <form id="intakeForm" class="form-wrap" novalidate>
 
+  <!-- ═══ Loan Officer ═══ -->
+  <div class="section">
+    <h2 class="section-title"><span class="icon">&bull;</span> Loan Officer</h2>
+    <div class="field">
+      <label for="loanOfficer">Select Loan Officer <span class="req">*</span></label>
+      <select id="loanOfficer" required>
+        <option value="">Select...</option>
+        <option value="3">Ryan Turner</option>
+        <option value="3">Ilija Petrovic</option>
+      </select>
+    </div>
+  </div>
+
   <!-- ═══ Contact Info ═══ -->
   <div class="section">
     <h2 class="section-title"><span class="icon">1</span> Contact Information</h2>
@@ -418,10 +431,12 @@ select{cursor:pointer;appearance:none;
     e.preventDefault();
     form.querySelectorAll('.field.invalid').forEach(function(f){ f.classList.remove('invalid'); });
 
+    var loanOfficer = document.getElementById('loanOfficer');
     var loansPerYear = getChecked('loansPerYear');
     var strategy = getChecked('strategy');
     var valid = true;
 
+    if(!loanOfficer.value){ loanOfficer.closest('.field').classList.add('invalid'); valid = false; }
     if(loansPerYear.length === 0){
       var lpField = form.querySelector('input[name="loansPerYear"]').closest('.field');
       lpField.classList.add('invalid');
@@ -446,6 +461,9 @@ select{cursor:pointer;appearance:none;
 
     addField(pf, 'utf8', '\u2713');
     addField(pf, 'authenticity_token', 'x');
+
+    // Loan officer selection
+    addField(pf, 'fields[how-did-you-hear-about-us]', loanOfficer.value);
 
     // Contact
     addField(pf, 'fields[first-name]', document.getElementById('firstName').value.trim());

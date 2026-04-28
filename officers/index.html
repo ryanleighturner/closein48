@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loan Officers &mdash; Close In 48</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#08090a;
+  --surface:#111214;
+  --surface-2:#191b1e;
+  --accent:#d4952a;
+  --accent-glow:rgba(212,149,42,.15);
+  --white:#f0ede8;
+  --muted:#6b6e73;
+  --border:#222426;
+  --radius:4px;
+}
+html{font-size:16px;scroll-behavior:smooth}
+body{
+  font-family:'Outfit',sans-serif;color:var(--white);background:var(--bg);
+  line-height:1.6;-webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+h1,h2,h3{font-family:'Bebas Neue',sans-serif;font-weight:400;line-height:1;letter-spacing:.04em}
+h4{font-family:'Outfit',sans-serif;font-weight:600}
+a{color:inherit;text-decoration:none}
+
+body::after{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
+  background:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");
+  background-size:200px;
+  opacity:.5;
+}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* ── Header ── */
+.site-header{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 clamp(1.5rem,4vw,3rem);height:64px;
+  background:rgba(8,9,10,.8);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+}
+.logo{display:flex;align-items:center;gap:.65rem;text-decoration:none}
+.logo-num{
+  font-family:'Bebas Neue',sans-serif;font-size:1.5rem;
+  color:var(--accent);line-height:1;letter-spacing:.02em;
+}
+.logo-text{
+  font-size:.7rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);line-height:1.2;
+}
+.logo-text strong{color:var(--white);display:block;letter-spacing:.14em}
+.header-nav{display:flex;align-items:center;gap:.25rem}
+.header-nav a{
+  font-size:.72rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);padding:.5rem .9rem;border-radius:var(--radius);transition:all .25s;
+}
+.header-nav a:hover{color:var(--white);background:var(--surface-2)}
+.header-nav a.active{color:var(--white)}
+
+/* ── Page Hero ── */
+.page-hero{
+  position:relative;padding:9rem 2rem 4rem;text-align:center;overflow:hidden;
+}
+.page-hero-grid{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size:80px 80px;
+  opacity:.25;
+  mask-image:radial-gradient(ellipse 70% 60% at 50% 50%, black 20%, transparent 70%);
+  -webkit-mask-image:radial-gradient(ellipse 70% 60% at 50% 50%, black 20%, transparent 70%);
+}
+.page-hero-glow{
+  position:absolute;top:30%;left:50%;transform:translateX(-50%);
+  width:600px;height:300px;border-radius:50%;
+  background:radial-gradient(circle,rgba(212,149,42,.1) 0%,transparent 70%);
+  pointer-events:none;
+}
+.page-hero-content{position:relative;max-width:700px;margin:0 auto;z-index:1}
+.page-hero-eyebrow{
+  display:inline-block;
+  font-size:.68rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--accent);
+  padding:.45rem 1rem;
+  border:1px solid rgba(212,149,42,.25);border-radius:20px;
+  margin-bottom:1.5rem;
+  animation:fadeIn .8s .2s both;
+}
+.page-hero h1{
+  font-size:clamp(2.5rem,6vw,4.5rem);
+  margin-bottom:1.25rem;
+  animation:fadeUp .8s .4s both;
+}
+.page-hero h1 span{color:var(--accent)}
+.page-hero-sub{
+  font-size:1rem;font-weight:300;color:var(--muted);
+  max-width:520px;margin:0 auto;line-height:1.7;
+  animation:fadeUp .8s .6s both;
+}
+
+/* ── Officers Grid ── */
+.officers-section{padding:3rem clamp(1.25rem,4vw,3rem) 6rem;background:var(--bg)}
+.officers-grid{
+  max-width:1100px;margin:0 auto;
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.5rem;
+}
+
+.officer-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:2rem 1.5rem;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+  transition:border-color .3s, box-shadow .3s, transform .3s;
+}
+.officer-card:hover{
+  border-color:rgba(212,149,42,.3);
+  box-shadow:0 0 30px var(--accent-glow);
+  transform:translateY(-3px);
+}
+.officer-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--accent),transparent);
+  opacity:0;transition:opacity .3s;
+}
+.officer-card:hover::before{opacity:1}
+
+.officer-photo-wrap{
+  position:relative;
+  width:160px;height:160px;
+  margin:0 auto 1.5rem;
+}
+.officer-photo-wrap::after{
+  content:'';position:absolute;inset:-4px;
+  border-radius:50%;
+  border:1px solid var(--border);
+  pointer-events:none;
+}
+.officer-photo{
+  width:100%;height:100%;
+  border-radius:50%;
+  object-fit:cover;
+  border:2px solid var(--surface-2);
+  background:var(--surface-2);
+  display:block;
+}
+.officer-card:hover .officer-photo-wrap::after{border-color:var(--accent)}
+
+.officer-name{
+  font-family:'Bebas Neue',sans-serif;font-size:1.6rem;
+  letter-spacing:.04em;color:var(--white);
+  margin-bottom:.35rem;
+}
+.officer-title{
+  font-size:.68rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:1rem;
+}
+.officer-divider{
+  width:24px;height:2px;background:var(--accent);
+  margin:0 auto 1rem;border-radius:1px;
+}
+
+.officer-cta{
+  display:inline-flex;align-items:center;gap:.4rem;
+  font-size:.7rem;font-weight:600;color:var(--accent);
+  letter-spacing:.1em;text-transform:uppercase;
+  padding:.55rem 1rem;
+  border:1px solid rgba(212,149,42,.25);
+  border-radius:var(--radius);
+  transition:all .3s;
+  margin-top:.5rem;
+}
+.officer-cta:hover{
+  background:var(--accent);color:var(--bg);
+  border-color:var(--accent);
+}
+
+/* ── CTA Section ── */
+.cta-section{
+  background:var(--surface);
+  border-top:1px solid var(--border);
+  padding:5rem clamp(1.25rem,4vw,3rem);
+  text-align:center;
+}
+.cta-wrap{max-width:600px;margin:0 auto}
+.cta-wrap h2{font-size:clamp(2rem,4vw,2.6rem);margin-bottom:.75rem}
+.cta-wrap p{font-size:.9rem;color:var(--muted);margin-bottom:2rem;max-width:460px;margin-left:auto;margin-right:auto}
+.cta-buttons{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap}
+.btn{
+  display:inline-flex;align-items:center;gap:.5rem;
+  padding:.8rem 1.75rem;font-size:.82rem;font-weight:600;font-family:inherit;
+  letter-spacing:.06em;text-transform:uppercase;
+  border-radius:var(--radius);transition:all .3s;cursor:pointer;border:none;
+}
+.btn-primary{
+  color:var(--bg);background:var(--accent);
+  box-shadow:0 0 20px var(--accent-glow),0 2px 8px rgba(0,0,0,.3);
+}
+.btn-primary:hover{
+  background:#e0a23a;transform:translateY(-2px);
+  box-shadow:0 0 30px rgba(212,149,42,.25),0 4px 16px rgba(0,0,0,.3);
+}
+.btn-ghost{
+  color:var(--white);background:transparent;
+  border:1px solid var(--border);
+}
+.btn-ghost:hover{border-color:var(--muted);background:var(--surface-2)}
+
+.accent-bar{
+  width:32px;height:3px;background:var(--accent);margin:0 auto 1rem;
+  border-radius:2px;
+}
+
+/* ── Footer ── */
+.site-footer{
+  border-top:1px solid var(--border);
+  padding:3rem 2rem;text-align:center;background:var(--bg);
+}
+.footer-brand{
+  font-family:'Bebas Neue',sans-serif;font-size:1.4rem;
+  letter-spacing:.08em;color:var(--white);margin-bottom:.25rem;
+}
+.footer-sub{font-size:.75rem;color:var(--muted);margin-bottom:1rem}
+.footer-links{display:flex;justify-content:center;gap:1.5rem;flex-wrap:wrap}
+.footer-links a{
+  font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--accent);transition:opacity .2s;
+}
+.footer-links a:hover{opacity:.7}
+.footer-copy{margin-top:1.5rem;font-size:.65rem;color:var(--border)}
+</style>
+</head>
+<body>
+
+<!-- ── Header ── -->
+<header class="site-header">
+  <a href="/" class="logo">
+    <span class="logo-num">48</span>
+    <span class="logo-text"><strong>Close In 48</strong>Hard Money Lending</span>
+  </a>
+  <nav class="header-nav">
+    <a href="/officers" class="active">Loan Officers</a>
+    <a href="/intake">Borrower Intake</a>
+    <a href="/fixflip">Fix &amp; Flip</a>
+    <a href="/dcsr">DSCR</a>
+  </nav>
+</header>
+
+<!-- ── Page Hero ── -->
+<section class="page-hero">
+  <div class="page-hero-grid"></div>
+  <div class="page-hero-glow"></div>
+  <div class="page-hero-content">
+    <div class="page-hero-eyebrow">Meet The Team</div>
+    <h1>Our <span>Loan Officers</span></h1>
+    <p class="page-hero-sub">Direct access to lenders who close fast. Reach out to any of our officers to start your loan request.</p>
+  </div>
+</section>
+
+<!-- ── Officers Grid ── -->
+<section class="officers-section">
+  <div class="officers-grid">
+
+    <div class="officer-card reveal">
+      <div class="officer-photo-wrap">
+        <img class="officer-photo" src="images/ryan-turner.jpeg" alt="Ryan Turner" loading="lazy">
+      </div>
+      <h3 class="officer-name">Ryan Turner</h3>
+      <div class="officer-title">Loan Officer</div>
+      <div class="officer-divider"></div>
+      <a href="/intake" class="officer-cta">Start Application</a>
+    </div>
+
+    <div class="officer-card reveal">
+      <div class="officer-photo-wrap">
+        <img class="officer-photo" src="images/ilija-petrovic.jpg" alt="Ilija Petrovic" loading="lazy">
+      </div>
+      <h3 class="officer-name">Ilija Petrovic</h3>
+      <div class="officer-title">Loan Officer</div>
+      <div class="officer-divider"></div>
+      <a href="/intake" class="officer-cta">Start Application</a>
+    </div>
+
+    <div class="officer-card reveal">
+      <div class="officer-photo-wrap">
+        <img class="officer-photo" src="images/noah-cull.jpeg" alt="Noah Cull" loading="lazy">
+      </div>
+      <h3 class="officer-name">Noah Cull</h3>
+      <div class="officer-title">Loan Officer</div>
+      <div class="officer-divider"></div>
+      <a href="/intake" class="officer-cta">Start Application</a>
+    </div>
+
+    <div class="officer-card reveal">
+      <div class="officer-photo-wrap">
+        <img class="officer-photo" src="images/doug-edwards.jpg" alt="Doug Edwards" loading="lazy">
+      </div>
+      <h3 class="officer-name">Doug Edwards</h3>
+      <div class="officer-title">Loan Officer</div>
+      <div class="officer-divider"></div>
+      <a href="/intake" class="officer-cta">Start Application</a>
+    </div>
+
+    <div class="officer-card reveal">
+      <div class="officer-photo-wrap">
+        <img class="officer-photo" src="images/luke-stam.jpg" alt="Luke Stam" loading="lazy">
+      </div>
+      <h3 class="officer-name">Luke Stam</h3>
+      <div class="officer-title">Loan Officer</div>
+      <div class="officer-divider"></div>
+      <a href="/intake" class="officer-cta">Start Application</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── CTA ── -->
+<section class="cta-section">
+  <div class="cta-wrap reveal">
+    <div class="accent-bar"></div>
+    <h2>Ready to Close?</h2>
+    <p>Pick the loan that fits your deal and start your application. Our team will follow up to gather docs and get to closing fast.</p>
+    <div class="cta-buttons">
+      <a href="/fixflip" class="btn btn-primary">Apply for Fix &amp; Flip</a>
+      <a href="/dcsr" class="btn btn-ghost">Apply for DSCR Loan</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── Footer ── -->
+<footer class="site-footer">
+  <div class="footer-brand">Close In 48</div>
+  <div class="footer-sub">closein48.com &mdash; Investment property financing for real estate investors.</div>
+  <div class="footer-links">
+    <a href="/officers">Loan Officers</a>
+    <a href="/intake">Borrower Intake</a>
+    <a href="/fixflip">Fix &amp; Flip Application</a>
+    <a href="/dcsr">DSCR Application</a>
+  </div>
+</footer>
+
+<script>
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      obs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>

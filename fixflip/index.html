@@ -487,7 +487,7 @@ select{cursor:pointer;appearance:none;
     addField(pf, 'fields[size-of-house-sf]', document.getElementById('sqft').value);
     addField(pf, 'fields[year-built-3]', document.getElementById('yearBuilt').value);
     addField(pf, 'fields[renovations-made]', document.getElementById('condition').value.trim());
-    addField(pf, 'fields[photos]', document.getElementById('photos').value.trim());
+    addField(pf, 'fields[photos][][value]', document.getElementById('photos').value.trim());
 
     // Borrower
     addField(pf, 'fields[borrowers-entity]', document.getElementById('entity').value.trim());

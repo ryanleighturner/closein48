@@ -205,55 +205,20 @@ select{cursor:pointer;appearance:none;
         <select id="market" required>
           <option value="">Select state...</option>
           <option value="3">Alabama</option>
-          <option value="AK">Alaska</option>
-          <option value="AZ">Arizona</option>
-          <option value="AR">Arkansas</option>
-          <option value="CA">California</option>
-          <option value="CO">Colorado</option>
-          <option value="CT">Connecticut</option>
+          <option value="50">Arizona</option>
           <option value="46">Delaware</option>
-          <option value="7">Florida</option>
+          <option value="7">Florida (Non-Coastal)</option>
           <option value="40">Georgia</option>
-          <option value="HI">Hawaii</option>
-          <option value="ID">Idaho</option>
-          <option value="IL">Illinois</option>
-          <option value="IN">Indiana</option>
-          <option value="IA">Iowa</option>
-          <option value="KS">Kansas</option>
-          <option value="KY">Kentucky</option>
-          <option value="LA">Louisiana</option>
-          <option value="ME">Maine</option>
-          <option value="MD">Maryland</option>
-          <option value="MA">Massachusetts</option>
-          <option value="MI">Michigan</option>
-          <option value="MN">Minnesota</option>
-          <option value="MS">Mississippi</option>
-          <option value="MO">Missouri</option>
-          <option value="MT">Montana</option>
-          <option value="NE">Nebraska</option>
-          <option value="NV">Nevada</option>
-          <option value="NH">New Hampshire</option>
+          <option value="51">Maine</option>
+          <option value="48">Michigan</option>
           <option value="28">New Jersey</option>
-          <option value="NM">New Mexico</option>
-          <option value="NY">New York</option>
           <option value="4">North Carolina</option>
-          <option value="ND">North Dakota</option>
           <option value="12">Ohio</option>
           <option value="47">Oklahoma</option>
-          <option value="OR">Oregon</option>
           <option value="1">Pennsylvania</option>
-          <option value="RI">Rhode Island</option>
-          <option value="SC">South Carolina</option>
-          <option value="SD">South Dakota</option>
+          <option value="49">South Carolina</option>
           <option value="11">Tennessee</option>
           <option value="8">Texas</option>
-          <option value="UT">Utah</option>
-          <option value="VT">Vermont</option>
-          <option value="VA">Virginia</option>
-          <option value="WA">Washington</option>
-          <option value="WV">West Virginia</option>
-          <option value="WI">Wisconsin</option>
-          <option value="WY">Wyoming</option>
         </select>
       </div>
       <div class="field">
@@ -513,7 +478,7 @@ select{cursor:pointer;appearance:none;
     addField(pf, 'fields[size-of-house-sf]', document.getElementById('sqft').value);
     addField(pf, 'fields[year-built-3]', document.getElementById('yearBuilt').value);
     addField(pf, 'fields[renovations-made]', document.getElementById('condition').value.trim());
-    addField(pf, 'fields[photos]', document.getElementById('photos').value.trim());
+    addField(pf, 'fields[photos][][value]', document.getElementById('photos').value.trim());
 
     // Borrower
     addField(pf, 'fields[borrowers-entity]', document.getElementById('entity').value.trim());

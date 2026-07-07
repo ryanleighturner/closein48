@@ -434,6 +434,14 @@ select{cursor:pointer;appearance:none;
   const form = document.getElementById('loanForm');
   const toast = document.getElementById('toast');
 
+  // Pre-select loan officer from ?o= attribution ID (e.g. officers page CTAs: /fixflip?o=3)
+  (function preselectOfficer(){
+    var id = new URLSearchParams(window.location.search).get('o');
+    if(!id) return;
+    var sel = document.getElementById('loanOfficer');
+    if(sel && sel.querySelector('option[value="'+id+'"]')) sel.value = id;
+  })();
+
   function showToast(msg, isError){
     toast.textContent = msg;
     toast.classList.toggle('error', !!isError);
